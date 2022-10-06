@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
 
 function App() {
+
+
+  let ApiKey = 'bb455fb2731631fab537cfb7363cbb84'
+  const [lat, setLat] = useState('');
+  const [lon, setLong] = useState('');
+  const [data, setData] = useState('');
+
+ 
+
+    const fetchData = () => {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        setLat(position.coords.latitude);
+        setLong(position.coords.longitude);
+      });
+
+    }
+
+    async function getCity() {
+      await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${ApiKey}`)
+      .then(res => res.json())
+      .then(result => {
+        setData(result)
+        console.log(result);
+      });
+    }
+ 
+  fetchData()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+        <button onClick={getCity}>Get name your city</button>
+        <h1>{data.name}</h1>
     </div>
   );
 }
