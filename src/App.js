@@ -1,38 +1,48 @@
 import React, {useState} from "react";
+import BlockPost from "./Components/BlockPost"
+import './Style/appStyle.css'
+import {apiKey} from './Components/API/apiKey'
 
 function App() {
 
 
-  let ApiKey = 'bb455fb2731631fab537cfb7363cbb84'
-  const [lat, setLat] = useState('');
-  const [lon, setLong] = useState('');
-  const [data, setData] = useState('');
-
  
+  const[city, setCity] = useState('')
+  const [data, setData] = useState('')
 
-    const fetchData = () => {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        setLat(position.coords.latitude);
-        setLong(position.coords.longitude);
-      });
+  function putCity() {
+    setCity(city)
+  }
 
-    }
 
     async function getCity() {
-      await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${ApiKey}`)
+      await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
       .then(res => res.json())
       .then(result => {
         setData(result)
         console.log(result);
       });
     }
- 
-  fetchData()
+
+    for(let key in data) {
+      return (
+        <div className="app-wrapper">
+          <h1>{data.name}</h1>
+          <p>{Math.ceil(data.main.temp) - 273} °C</p>
+          <p>{data.weather[0]['description']}</p>
+        </div>
+      )
+    }
+
+
 
   return (
     <div className="app">
+      <div className="df">
+        <input type="text" onChange={e => setCity(e.target.value)} />
         <button onClick={getCity}>Get name your city</button>
-        <h1>{data.name}</h1>
+      </div>
+        
     </div>
   );
 }
