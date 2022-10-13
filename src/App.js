@@ -15,25 +15,30 @@ function App() {
 
     async function getCity() {
         try {
-            await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
+            await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
+            
             .then(res => res.json())
             .then(result => {
-            console.log(result);
-            let newAddArr = {
-                id : result.id,
-                title : result.name,
-                weatherNum : result.main.temp,
-                weatherStr: result.weather[0].description.charAt(0).toUpperCase() + result.weather[0].description.slice(1),
-                humidity : result.main.humidity,
-                icon: `http://openweathermap.org/img/w/${result.weather[0].icon}.png`
-            };
+                console.log(result);
+                let newAddArr = {
+                    id : result.id,
+                    title : result.name,
+                    weatherNum : result.main.temp,
+                    weatherStr: result.weather[0].description.charAt(0).toUpperCase() + result.weather[0].description.slice(1),
+                    humidity : result.main.humidity,
+                    icon: `http://openweathermap.org/img/w/${result.weather[0].icon}.png`
+                };
+
             setArr([...arr, newAddArr]);
             setCity("")
+
             });
+
         } catch (error) {
             alert('Неверное название населённого пункта, попробуйте ещё раз.')
         } 
     }
+    console.log(city)
 
     const listener = event => {
         if (event.code === "Enter" || event.code === "NumpadEnter") {
