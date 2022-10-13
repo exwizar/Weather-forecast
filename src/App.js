@@ -26,19 +26,20 @@ function App() {
                     weatherNum : result.main.temp,
                     weatherStr: result.weather[0].description.charAt(0).toUpperCase() + result.weather[0].description.slice(1),
                     humidity : result.main.humidity,
-                    icon: `http://openweathermap.org/img/w/${result.weather[0].icon}.png`
+                    icon: `http://openweathermap.org/img/w/${result.weather[0].icon}.png`,
+                    data: {
+                        timezone: result.timezone,
+                        dt: result.dt
+                    }
                 };
-
             setArr([...arr, newAddArr]);
             setCity("")
-
             });
 
         } catch (error) {
             alert('Неверное название населённого пункта, попробуйте ещё раз.')
         } 
     }
-    console.log(city)
 
     const listener = event => {
         if (event.code === "Enter" || event.code === "NumpadEnter") {
