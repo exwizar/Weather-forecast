@@ -41,13 +41,12 @@ function App() {
                     }
                 };
 
-                    if(arr.map(item => item.id) == newAddArr.id) {
-                        alert('Данные город уже есть в списке')
-                        setCity("")
-                    } else {
-                        setArr([...arr, newAddArr]);
-                        setCity("")
-                    }
+                    setArr([...arr, newAddArr]);
+                    setCity("")
+                // check repeat city 
+                    arr.map(item => item.id == newAddArr.id ? alert('Данные город уже есть в списке') + setCity('') : '' ) 
+                        
+                  
                 
             });
             
@@ -57,11 +56,6 @@ function App() {
         
     }
     
-
-
-
-   
-
     return (
         <div className="app">
             <div className="container">
