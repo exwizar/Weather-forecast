@@ -1,19 +1,28 @@
 import React from 'react'
 import classes from '../Style/weatherBlock.module.scss'
 import TimeZone from './TimeZone'
+import '../Style/animation.scss'
+import {
+    CSSTransition,
+    TransitionGroup,
+  } from 'react-transition-group';
 
 
-const WeatherBlock = ({arr, remove,props}) => {
+const WeatherBlock = ({arr, remove}) => {
 
     return (
         <div>
-            {arr.map((item, index) => {
-                console.log(arr)
+            <TransitionGroup>
+            {arr.map((item) => {
                 return (
-                    <div key={item.id} className={classes.weatherBlock}>
+                    <CSSTransition           
+                    key={item.id}
+                    timeout={500}
+                    classNames="item">
+                    <div  className={classes.weatherBlock}>
 
                         <p className={classes.title}>{item.title}</p>
-
+ 
                         <TimeZone data={item.data} />
                         
                         <p>{Math.ceil(item.weatherNum) - 273} °C</p>
@@ -30,9 +39,11 @@ const WeatherBlock = ({arr, remove,props}) => {
                         
                         <button className={classes.button} onClick={() => remove(item)} >Удалить</button>
                     </div>
+                </CSSTransition>
                 )
             
             })}
+            </TransitionGroup>
       </div>
     )
 

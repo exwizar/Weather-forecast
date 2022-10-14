@@ -84,3 +84,22 @@ a {
 		padding: 22px 18px;
 	}
 }
+
+.items-btn {
+	margin-right: 0.5rem;
+  }
+  
+  .items-enter {
+	opacity: 0;
+  }
+  .items-enter-active {
+	opacity: 1;
+	transition: opacity 500ms ease-in;
+  }
+  .items-exit {
+	opacity: 1;
+  }
+  .items-exit-active {
+	opacity: 0;
+	transition: opacity 500ms ease-in;
+  }

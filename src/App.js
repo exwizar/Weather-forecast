@@ -1,17 +1,26 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import WeatherBlock from "./Components/WeatherBlock"
 import './Style/appStyle.scss'
 import {apiKey} from './Components/API/apiKey'
 import './Style/reset.scss'
 
-function App() {
 
+function App() {
+    
     const[arr, setArr] = useState([])
     const[city, setCity] = useState('')
+    const[local, setLocal] = useState([])
 
     const removePost = (arrItem) => {
-        setArr(arr.filter((item) => item.id !== arrItem.id  ))
+        setArr(arr.filter((item) => item.id !== arrItem.id))
     }
+
+    const listener = event => {
+        if (event.code === "Enter" || event.code === "NumpadEnter") {
+          event.preventDefault();
+          getCity()
+        }
+    };
 
     async function getCity() {
         try {
@@ -32,22 +41,20 @@ function App() {
                         dt: result.dt
                     }
                 };
-            setArr([...arr, newAddArr]);
-            setCity("")
-            });
+ 
+                setArr([...arr, newAddArr]);
+                setCity("")
 
+                
+            });
+            
         } catch (error) {
             alert('Неверное название населённого пункта, попробуйте ещё раз.')
         } 
     }
 
-    const listener = event => {
-        if (event.code === "Enter" || event.code === "NumpadEnter") {
-          event.preventDefault();
-          getCity()
-        }
-      };
-      
+
+   
 
     return (
         <div className="app">
@@ -67,7 +74,7 @@ function App() {
                         className="btn btn--primary btn--inside uppercase"
                     >Send</button>
                 </form>
-            <WeatherBlock className='weather-block' remove={removePost} arr={arr} />
+                    <WeatherBlock className='weather-block' remove={removePost} arr={arr} />
             </div>
 
 
