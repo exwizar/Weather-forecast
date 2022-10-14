@@ -9,7 +9,6 @@ function App() {
     
     const[arr, setArr] = useState([])
     const[city, setCity] = useState('')
-    const[local, setLocal] = useState([])
 
     const removePost = (arrItem) => {
         setArr(arr.filter((item) => item.id !== arrItem.id))
@@ -41,17 +40,24 @@ function App() {
                         dt: result.dt
                     }
                 };
- 
-                setArr([...arr, newAddArr]);
-                setCity("")
 
+                    if(arr.map(item => item.id) == newAddArr.id) {
+                        alert('Данные город уже есть в списке')
+                        setCity("")
+                    } else {
+                        setArr([...arr, newAddArr]);
+                        setCity("")
+                    }
                 
             });
             
         } catch (error) {
             alert('Неверное название населённого пункта, попробуйте ещё раз.')
         } 
+        
     }
+    
+
 
 
    
