@@ -1,6 +1,6 @@
 import React from 'react'
 import classes from '../Style/weatherBlock.module.scss'
-import TimeZone from './TimeZone'
+import TimeZone from './UI/time/TimeZone'
 import '../Style/animation.scss'
 import {
     CSSTransition,
@@ -20,8 +20,11 @@ const WeatherBlock = ({arr, remove}) => {
                     timeout={500}
                     classNames="item">
                     <div  className={classes.weatherBlock}>
+                        <div className={classes.titleBlock}>
+                            <p className={classes.title}>Погода во {item.title}</p>
+                            <button className={classes.button} onClick={() => remove(item)} ></button>
+                        </div>
 
-                        <p className={classes.title}>{item.title}</p>
  
                         <TimeZone data={item.data} />
                         
@@ -37,7 +40,6 @@ const WeatherBlock = ({arr, remove}) => {
 
                         <p>Влажность {item.humidity}%</p>
                         
-                        <button className={classes.button} onClick={() => remove(item)} >Удалить</button>
                     </div>
                 </CSSTransition>
                 )

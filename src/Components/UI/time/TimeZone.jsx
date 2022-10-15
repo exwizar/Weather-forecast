@@ -1,4 +1,5 @@
 import React from 'react'
+import classes from './time.module.scss'
 
 const TimeZone = (data) => {
     for(let key in data) {
@@ -24,7 +25,7 @@ const TimeZone = (data) => {
         });
     
             return (
-                <p>
+                <p className={classes.timeZone}>
                     {date.charAt(0).toUpperCase() + date.slice(1)} {year}, {hour}
                 </p>
             )
