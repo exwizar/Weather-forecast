@@ -1,5 +1,5 @@
 .item-enter {
-    transform: translateX(-350px);
+    transform: translateX(-1000px);
   }
   .item-enter-active {
     transform: translateX(0);
@@ -9,6 +9,6 @@
     opacity: 1;
   }
   .item-exit-active {
-    transform: translateX(-350px);
+    transform: translateX(-1000px);
     transition: all 500ms ease-in;
   }

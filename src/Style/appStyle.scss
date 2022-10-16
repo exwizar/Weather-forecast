@@ -30,7 +30,7 @@ a {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-    margin-top: 100px;
+    padding-top: 100px;
 }
 
 .uppercase {
@@ -84,4 +84,20 @@ a {
 		padding: 22px 18px;
 	}
 }
+
+.app {
+	background-image: url('https://denis-creative.com/wp-content/uploads/2019/03/bg-scroll.jpg');
+	background-size: 250px 250px; /*только для этого примера*/
+	width: 100vw;
+	height: 100vh ;
+  animation: moveSlideshow 5s linear infinite;
+  overflow-x: hidden;
+  @keyframes moveSlideshow {
+	100% {
+	  background-position: 250px 250px;
+	}
+  }
+}
+ 
+
 
