@@ -9,6 +9,13 @@ function App() {
     
     const[arr, setArr] = useState([])
     const[city, setCity] = useState('')
+    const[local, setLocal] = useState(() => {
+        const saved = localStorage.getItem('citys')
+        const initialValue = JSON.parse(saved)
+        return initialValue || ''
+    })
+    const[data, setData] = useState([])
+
 
     const removePost = (arrItem) => {
         setArr(arr.filter((item) => item.id !== arrItem.id))
@@ -27,6 +34,7 @@ function App() {
             
             .then(res => res.json())
             .then(result => {
+                setData(result)
                 console.log(result);
                 let newAddArr = {
                     id : result.id,
@@ -38,23 +46,24 @@ function App() {
                     data: {
                         timezone: result.timezone,
                         dt: result.dt
-                    }
+                    },
+                    deg: result.wind.deg,
+                    speed: result.wind.speed
                 };
-
-                    setArr([...arr, newAddArr]);
-                    setCity("")
+                setArr([...arr, newAddArr]);
+                setLocal([...local, result.name])
+                setCity("")
                 // check repeat city 
-                    arr.map(item => item.id == newAddArr.id ? alert('Данные город уже есть в списке') + setCity('') : '' ) 
-                        
-                  
-                
+                arr.map(item => item.id == newAddArr.id ? alert('Данные город уже есть в списке') + setCity("") : '' ) 
             });
             
         } catch (error) {
             alert('Неверное название населённого пункта, попробуйте ещё раз.')
         } 
-        
     }
+console.log(data)
+
+
     
     return (
         <div className="app">
@@ -70,9 +79,9 @@ function App() {
                     />
                     <button 
                         type="button" 
-                        onClick={getCity} 
+                        onClick={getCity}
                         className="btn btn--primary btn--inside uppercase"
-                    >Send</button>
+                    >add</button>
                 </form>
                     <WeatherBlock className='weather-block' remove={removePost} arr={arr} />
             </div>
