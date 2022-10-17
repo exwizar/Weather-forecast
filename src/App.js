@@ -3,18 +3,24 @@ import WeatherBlock from "./Components/WeatherBlock"
 import './Style/appStyle.scss'
 import {apiKey} from './Components/API/apiKey'
 import './Style/reset.scss'
+import Modal from "./Components/Modal/Modal";
 
 
 function App() {
     
+    let getItems = () => {
+        let list = localStorage.getItem('lists')
+        console.log(list)
+        if(list) {
+            return JSON.parse(localStorage.getItem('lists'))
+        } else {
+            return []
+        }
+    }
     const[arr, setArr] = useState([])
     const[city, setCity] = useState('')
-    const[local, setLocal] = useState(() => {
-        const saved = localStorage.getItem('citys')
-        const initialValue = JSON.parse(saved)
-        return initialValue || ''
-    })
-    const[data, setData] = useState([])
+    const[local, setLocal] = useState(getItems())
+    const [modalAcitve, setModalActive] = useState(false)
 
 
     const removePost = (arrItem) => {
@@ -34,7 +40,6 @@ function App() {
             
             .then(res => res.json())
             .then(result => {
-                setData(result)
                 console.log(result);
                 let newAddArr = {
                     id : result.id,
@@ -51,22 +56,33 @@ function App() {
                     speed: result.wind.speed
                 };
                 setArr([...arr, newAddArr]);
-                setLocal([...local, result.name])
+                // setLocal([...local, result.name])
                 setCity("")
                 // check repeat city 
                 arr.map(item => item.id == newAddArr.id ? alert('Данные город уже есть в списке') + setCity("") : '' ) 
             });
             
         } catch (error) {
-            alert('Неверное название населённого пункта, попробуйте ещё раз.')
+            setModalActive(true)
+
         } 
     }
-console.log(data)
-
-
     
+
+    // useEffect(() => {
+    //         localStorage.setItem('lists', JSON.stringify(local))
+    // },[local])
+
+    useEffect(() => {
+  
+    }, [])
+
+
+
+
     return (
         <div className="app">
+        <Modal active={modalAcitve} setActive={setModalActive}/>
             <div className="container">
                 <form className="form">
                     <input 
@@ -83,9 +99,8 @@ console.log(data)
                         className="btn btn--primary btn--inside uppercase"
                     >add</button>
                 </form>
-                    <WeatherBlock className='weather-block' remove={removePost} arr={arr} />
+                    <WeatherBlock className='weather-block' remove={removePost} arr={arr}/>
             </div>
-
 
         </div>
         

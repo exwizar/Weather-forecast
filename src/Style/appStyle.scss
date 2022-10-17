@@ -90,8 +90,9 @@ a {
 	background-size: 250px 250px; /*только для этого примера*/
 	width: 100vw;
 	height: 100vh ;
-  animation: moveSlideshow 5s linear infinite;
-  overflow-x: hidden;
+	animation: moveSlideshow 5s linear infinite;
+	overflow-x: hidden;
+	
   @keyframes moveSlideshow {
 	100% {
 	  background-position: 250px 250px;
