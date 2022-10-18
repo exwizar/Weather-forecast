@@ -37,7 +37,6 @@ function App() {
     async function getCity() {
         try {
             await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
-            
             .then(res => res.json())
             .then(result => {
                 console.log(result);
@@ -56,7 +55,7 @@ function App() {
                     speed: result.wind.speed
                 };
                 setArr([...arr, newAddArr]);
-                // setLocal([...local, result.name])
+                // setLocal([...local, city])
                 setCity("")
                 // check repeat city 
                 arr.map(item => item.id == newAddArr.id ? alert('Данные город уже есть в списке') + setCity("") : '' ) 
@@ -67,15 +66,12 @@ function App() {
 
         } 
     }
-    
+
 
     // useEffect(() => {
     //         localStorage.setItem('lists', JSON.stringify(local))
     // },[local])
 
-    useEffect(() => {
-  
-    }, [])
 
 
 
