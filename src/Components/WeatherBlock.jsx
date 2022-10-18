@@ -8,12 +8,12 @@ import drop from '../Style/images/drop.svg'
 import wind from '../Style/images/wind.svg'
 
 
-const WeatherBlock = ({arr, remove}) => {
+const WeatherBlock = ({data, remove}) => {
 
     return (
         <div>
             <TransitionGroup>
-            {arr.map((item) => {
+            {data.map((item) => {
                 return (
                     <CSSTransition           
                         key={item.id}
@@ -23,28 +23,28 @@ const WeatherBlock = ({arr, remove}) => {
 
                             <div className={classes.titleBlock}>
 
-                                <p className={classes.title}>Погода в городе {item.title}</p>
+                                <p className={classes.title}>Погода в городе {item.name}</p>
                                 <button className={classes.button} onClick={() => remove(item)} ></button>
 
                             </div>
 
     
-                            <TimeZone data={item.data} />
+                            <TimeZone dateInfo={item.dt} time={item.timezone} /> 
                             
 
                             <div className={classes.weatherStr}>
-                                <p className={classes.weatherNum}>{Math.ceil(item.weatherNum) - 273} °C </p>
-                                <img src={item.icon} alt="weather" />
+                                <p className={classes.weatherNum}>{Math.ceil(item.main.temp) - 273} °C </p>
+                                <img src={`http://openweathermap.org/img/w/${item.weather[0].icon}.png`} alt="weather" />
                             </div>
 
-                            <WindDirection deg={item.deg} />
+                            <WindDirection deg={item.wind.deg} />
 
                             <div className={classes.infoBlock}>
 
                                 <img src={drop} className={classes.drop} />
-                                <p>{item.humidity}%</p>
+                                <p>{item.main.humidity}%</p>
                                 <img src={wind} className={classes.drop} />
-                                <p>{item.speed} m/s</p>
+                                <p>{item.wind.speed} m/s</p>
 
                             </div>
                         </div>

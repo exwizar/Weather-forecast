@@ -1,10 +1,10 @@
 import React from 'react'
 import classes from './time.module.scss'
 
-const TimeZone = (data) => {
-    for(let key in data) {
-        const timezone = data[key].timezone;
-        const dt = data[key].dt;
+const TimeZone = ({time, dateInfo}) => {
+
+        const timezone = time;
+        const dt = dateInfo;
         const dateTime = new Date(dt * 1000);
         const toUtc = dateTime.getTime() + dateTime.getTimezoneOffset() * 60000;
         const currentLocalTime = toUtc + 1000 * timezone;
@@ -29,7 +29,6 @@ const TimeZone = (data) => {
                     {date.charAt(0).toUpperCase() + date.slice(1)} {year}, {hour}
                 </p>
             )
-    }
 }
 
 export default TimeZone
