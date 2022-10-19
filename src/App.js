@@ -10,7 +10,7 @@ function App() {
     
     let getItems = () => {
         let list = localStorage.getItem('lists')
-        console.log(list)
+        // console.log(list)
         if(list) {
             return JSON.parse(localStorage.getItem('lists'))
         } else {
@@ -37,40 +37,27 @@ function App() {
         }
     };
 
-    async function getCity() {
-        try {
-            await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
-            .then(res => res.json())
-            .then(result => {
-                console.log(result);
-               if(cityArr.indexOf(result.name) == -1) {
-                   setCityArr([...cityArr, result.name])
-                   setData([...data, result])
-                } else {
-                   setModalActive(true)
-               }
-                
-                // setLocal([...local, city])
-                setCity("")
-                // check repeat city 
-            });
-            
-        } catch (error) {
-            setModalActive(true)
-
-        } 
+    async function getCity(item) {
+        if(city == '') return setModalActive(true)
+        await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city || item}&lang=ru&appid=${apiKey.api}`)
+        .then(res => res.json())
+        .then(result => {
+            if(result.main == null || result.main == undefined) setModalActive(true)
+            console.log(result);
+            if(cityArr.indexOf(result.name) == -1) {
+                setCityArr([...cityArr, result.name])
+                setData([...data, result])
+            } else {
+                setModalActive(true)
+            }
+            setCity("")
+        });  
     }
 
-    console.log(cityArr)
-
-    console.log(data)
-    console.log(data.hasOwnProte);
-
-    // useEffect(() => {
-    //         localStorage.setItem('lists', JSON.stringify(local))
-    // },[local])
-
-
+    
+    useEffect(() => {
+            localStorage.setItem('lists', JSON.stringify(local))
+    },[local])
 
 
     return (
