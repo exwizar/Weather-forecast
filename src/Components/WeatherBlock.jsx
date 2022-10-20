@@ -14,7 +14,7 @@ const WeatherBlock = ({data, remove}) => {
     return (
         <div>
             <TransitionGroup>
-            {data.map((item, index) => { if(!item.main) {return null}
+            {data.map((item) => { if(!item.main) {return}
                 return (
                     <CSSTransition           
                         key={item.id}

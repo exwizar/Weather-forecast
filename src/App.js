@@ -7,10 +7,8 @@ import Modal from "./Components/Modal/Modal";
 
 
 function App() {
-    
     let getItems = () => {
         let list = localStorage.getItem('lists')
-        // console.log(list)
         if(list) {
             return JSON.parse(localStorage.getItem('lists'))
         } else {
@@ -18,15 +16,15 @@ function App() {
         }
     }
     const[city, setCity] = useState('')
-    const[local, setLocal] = useState(getItems())
     const [modalAcitve, setModalActive] = useState(false)
     const[data, setData] = useState([])
-    const[cityArr, setCityArr] = useState([])
-
+    const[cityArr, setCityArr] = useState(getItems())
 
     // remove item
     const removePost = (dataItem) => {
         setData(data.filter((item) => item.id !== dataItem.id))
+        setCityArr(cityArr.filter((item) => item !== dataItem.name))
+        console.log(cityArr)
     }
 
     //onClick on key
@@ -37,12 +35,14 @@ function App() {
         }
     };
 
-    async function getCity(item) {
-        if(city == '') return setModalActive(true)
-        await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city || item}&lang=ru&appid=${apiKey.api}`)
+    async function getCity() {
+        await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
         .then(res => res.json())
         .then(result => {
-            if(result.main == null || result.main == undefined) setModalActive(true)
+            if(result.main == null || result.main == undefined) {
+                setCity('')
+                return setModalActive(true)
+            }
             console.log(result);
             if(cityArr.indexOf(result.name) == -1) {
                 setCityArr([...cityArr, result.name])
@@ -54,11 +54,30 @@ function App() {
         });  
     }
 
+    useEffect(() => {
+            localStorage.setItem('lists', JSON.stringify(cityArr))
+    },[cityArr])
+
+
+    function getItemLS() {
+        let m = []
+        let  response = JSON.parse(localStorage.getItem('lists'))
+        response.map(async (item) => {
+            await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${item}&lang=ru&appid=${apiKey.api}`)
+           .then(res => res.json())
+           .then(result => {
+               m.push(result)
+           }); 
+        }) 
+        setData(m)
+    }
+    
     
     useEffect(() => {
-            localStorage.setItem('lists', JSON.stringify(local))
-    },[local])
+        getItemLS()
+    },[])
 
+console.log(data)
 
     return (
         <div className="app">
