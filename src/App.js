@@ -69,7 +69,7 @@ function App() {
                m.push(result)
            }); 
         }) 
-        setData(m)
+        return setData(m)
     }
     
     
