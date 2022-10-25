@@ -3,8 +3,8 @@ import WeatherBlock from "./Components/WeatherBlock"
 import './Style/appStyle.scss'
 import {apiKey} from './Components/API/apiKey'
 import './Style/reset.scss'
-import Modal from "./Components/Modal/Modal";
-
+import Modal from "./Components/ModalBlock/Modal";
+import videoBg from './Style/images/clouds.mp4'
 
 function App() {
     let getItems = () => {
@@ -14,17 +14,17 @@ function App() {
         } else {
             return []
         }
-    }
-    const[city, setCity] = useState('')
-    const [modalAcitve, setModalActive] = useState(false)
-    const[data, setData] = useState([])
-    const[cityArr, setCityArr] = useState(getItems())
+    };
+
+    const[city, setCity] = useState('');
+    const[data, setData] = useState([]);
+    const[cityArr, setCityArr] = useState(getItems());
+    const [modalAcitve, setModalActive] = useState(false);
 
     // remove item
     const removePost = (dataItem) => {
         setData(data.filter((item) => item.id !== dataItem.id))
         setCityArr(cityArr.filter((item) => item !== dataItem.name))
-        console.log(cityArr)
     }
 
     //onClick on key
@@ -35,53 +35,45 @@ function App() {
         }
     };
 
+    function getItemLS() {
+        cityArr.forEach((city) => {
+            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
+            .then(res => res.json())
+            .then(result => {
+                data.push(result)
+            });  
+        })
+    };
+
     async function getCity() {
         await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
         .then(res => res.json())
         .then(result => {
-            if(result.main == null || result.main == undefined) {
+            if (result.main == null || result.main == undefined) {
                 setCity('')
                 return setModalActive(true)
             }
             console.log(result);
-            if(cityArr.indexOf(result.name) == -1) {
+            if (cityArr.indexOf(result.name) == -1) {
                 setCityArr([...cityArr, result.name])
                 setData([...data, result])
-            } else {
-                setModalActive(true)
-            }
+            } else setModalActive(true)
             setCity("")
         });  
-    }
+    };
 
     useEffect(() => {
-            localStorage.setItem('lists', JSON.stringify(cityArr))
-    },[cityArr])
+        localStorage.setItem('lists', JSON.stringify(cityArr))
+    },[cityArr]);
 
-
-    function getItemLS() {
-        let m = []
-        let  response = JSON.parse(localStorage.getItem('lists'))
-        response.map(async (item) => {
-            await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${item}&lang=ru&appid=${apiKey.api}`)
-           .then(res => res.json())
-           .then(result => {
-               m.push(result)
-           }); 
-        }) 
-        return setData(m)
-    }
-    
-    
     useEffect(() => {
         getItemLS()
-    },[])
-
-console.log(data)
-
+    },[]);
+    
     return (
         <div className="app">
-        <Modal active={modalAcitve} setActive={setModalActive}/>
+        <video className="video-bg" src={videoBg} autoPlay loop muted></video>
+            <Modal active={modalAcitve} setActive={setModalActive}/>
             <div className="container">
                 <form className="form">
                     <input 
@@ -100,10 +92,9 @@ console.log(data)
                 </form>
                     <WeatherBlock className='weather-block' remove={removePost} data={data}/>
             </div>
-
         </div>
         
     );
-}
+};
 
 export default App;

@@ -86,18 +86,16 @@ a {
 }
 
 .app {
-	background-image: url('https://denis-creative.com/wp-content/uploads/2019/03/bg-scroll.jpg');
-	background-size: 250px 250px; /*только для этого примера*/
-	width: 100vw;
-	height: 100vh ;
-	animation: moveSlideshow 5s linear infinite;
-	overflow-x: hidden;
-	
-  @keyframes moveSlideshow {
-	100% {
-	  background-position: 250px 250px;
+	.video-bg {
+		position: fixed;
+		top:0;
+		left: 0;
+		width: 100%;
+		min-height: 100vh;
+		object-fit: cover;
+		z-index: -999;
+
 	}
-  }
 }
  
 

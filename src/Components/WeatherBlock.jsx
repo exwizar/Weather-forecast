@@ -6,7 +6,7 @@ import {CSSTransition,TransitionGroup,} from 'react-transition-group';
 import WindDirection from './UI/windDirection/WindDirection';
 import drop from '../Style/images/drop.svg'
 import wind from '../Style/images/wind.svg'
-import Modal from './Modal/Modal';
+
 
 
 const WeatherBlock = ({data, remove}) => {
