@@ -35,16 +35,6 @@ function App() {
         }
     };
 
-    function getItemLS() {
-        cityArr.forEach((city) => {
-            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
-            .then(res => res.json())
-            .then(result => {
-                data.push(result)
-            });  
-        })
-    };
-
     async function getCity() {
         await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
         .then(res => res.json())
@@ -65,6 +55,17 @@ function App() {
     useEffect(() => {
         localStorage.setItem('lists', JSON.stringify(cityArr))
     },[cityArr]);
+
+    function getItemLS() {
+        return cityArr.map(city => {
+            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
+            .then(res => res.json())
+            .then(result => {
+                setData((data) => ([...data, result]))
+            });  
+        })
+
+    };
 
     useEffect(() => {
         getItemLS()
@@ -93,7 +94,6 @@ function App() {
                     <WeatherBlock className='weather-block' remove={removePost} data={data}/>
             </div>
         </div>
-        
     );
 };
 
