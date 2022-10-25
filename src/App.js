@@ -34,6 +34,17 @@ function App() {
           getCity()
         }
     };
+    
+    function getItemLS() {
+        return cityArr.map(city => {
+            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
+            .then(res => res.json())
+            .then(result => {
+                setData((data) => ([...data, result]))
+            });  
+        })
+
+    };
 
     async function getCity() {
         await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
@@ -56,16 +67,6 @@ function App() {
         localStorage.setItem('lists', JSON.stringify(cityArr))
     },[cityArr]);
 
-    function getItemLS() {
-        return cityArr.map(city => {
-            fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
-            .then(res => res.json())
-            .then(result => {
-                setData((data) => ([...data, result]))
-            });  
-        })
-
-    };
 
     useEffect(() => {
         getItemLS()
