@@ -36,10 +36,12 @@ function App() {
     };
     
     function getItemLS() {
+        let count = 1
         return cityArr.map(city => {
             fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
             .then(res => res.json())
             .then(result => {
+                result.order = count++
                 setData((data) => ([...data, result]))
             });  
         })
@@ -56,6 +58,7 @@ function App() {
             }
             console.log(result);
             if (cityArr.indexOf(result.name) == -1) {
+                result.order = cityArr.length + 1
                 setCityArr([...cityArr, result.name])
                 setData([...data, result])
             } else setModalActive(true)
@@ -72,6 +75,7 @@ function App() {
         getItemLS()
     },[]);
     
+    console.log(data)
     return (
         <div className="app">
         <video className="video-bg" src={videoBg} autoPlay loop muted></video>
@@ -92,7 +96,7 @@ function App() {
                         className="btn btn--primary btn--inside uppercase"
                     >add</button>
                 </form>
-                    <WeatherBlock className='weather-block' remove={removePost} data={data}/>
+                    <WeatherBlock className='weather-block' remove={removePost} data={data} setData={setData}/>
             </div>
         </div>
     );

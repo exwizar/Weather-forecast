@@ -1,5 +1,5 @@
-import React from 'react'
-import classes from '../Style/weatherBlock.module.scss'
+import React, { useState } from 'react'
+import '../Style/weatherBlock.scss'
 import TimeZone from './UI/time/TimeZone'
 import '../Style/animation.scss'
 import {CSSTransition,TransitionGroup,} from 'react-transition-group';
@@ -9,40 +9,83 @@ import wind from '../Style/images/wind.svg'
 
 
 
-const WeatherBlock = ({data, remove}) => {
+const WeatherBlock = ({data, remove, setData}) => {
 
+
+
+    let [currentCard, setCurrentCard] = useState(null)
+
+    function dragStartHandler(e, item) {
+        setCurrentCard(item)
+    }
+
+    function dragEndHandler(e) {
+    }
+
+    function dragOverHanler(e) {
+        e.preventDefault()
+    }
+
+    function dropHandler(e, item) {
+        e.preventDefault()
+        setData(data.map(i => {
+            if(i.id === item.id) {
+                return {...i, order: currentCard.order}
+            }
+            if (i.id === currentCard.id) {
+                return {...i, order: item.order}
+            }
+            return i
+        }))
+    }
+
+    const sortCard = (a,b) => {
+        if(a.order > b.order) {
+            return 1
+        } else {
+            return -1
+        }
+    } 
     return (
         <div>
             <TransitionGroup>
-            {data.map((item) => { if(!item.main) {return}
+            {data.sort(sortCard).map((item) => { if(!item.main) {return}
                 return (
                     <CSSTransition           
                         key={item.id}
                         timeout={500}
                         classNames="item">
-                        <div  className={classes.weatherBlock}>
+                        <div  
+                            className='weather-block'
+                            onDragStart={(e) => dragStartHandler(e, item)}
+                            onDragLeave={(e) => dragEndHandler(e)}
+                            onDragEnd={(e) => dragEndHandler(e)}
+                            onDragOver={(e) => dragOverHanler(e)}
+                            onDrop={(e) => dropHandler(e, item)}   
+                            draggable={true} 
+                        >
 
-                            <div className={classes.titleBlock}>
-                                <p className={classes.title}>Погода в городе {item.name}</p>
-                                <button className={classes.button} onClick={() => remove(item)} ></button>
+                            <div className='title-block'>
+                                <p className='title'>Погода в городе {item.name}</p>
+                                <button className='button' onClick={() => remove(item)} ></button>
                             </div>
 
                             <TimeZone dateInfo={item.dt} time={item.timezone} /> 
                             
-                            <div className={classes.weatherStr}>
-                                <p className={classes.weatherNum}>{Math.ceil(item.main.temp) - 273} °C </p>
+                            <div className='weather-info'>
+                                <p className='weather-info__num'>{Math.ceil(item.main.temp) - 273} °C </p>
                                 <img src={`http://openweathermap.org/img/w/${item.weather[0].icon}.png`} alt="weather" />
                             </div>
 
                             <WindDirection deg={item.wind.deg} />
 
-                            <div className={classes.infoBlock}>
-                                <img src={drop} className={classes.drop} />
+                            <div className='wind-block'>
+                                <img src={drop} className='drop' />
                                 <p>{item.main.humidity}%</p>
-                                <img src={wind} className={classes.drop} />
+                                <img src={wind} className='drop' />
                                 <p>{item.wind.speed} m/s</p>
                             </div>
-                        </div>
+                        </div> 
                     </CSSTransition>
                 )
             })}
@@ -50,6 +93,6 @@ const WeatherBlock = ({data, remove}) => {
       </div>
     )
 
-}
+};
 
 export default WeatherBlock
