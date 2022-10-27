@@ -20,7 +20,7 @@ const YourCity = ({children}) => {
             console.log(long)
             console.log(lat);
           });
-          await fetch(`http://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&units=metric&APPID=${apiKey.api}`)
+          await fetch(`http://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&lang=ru&units=metric&APPID=${apiKey.api}`)
           .then(res => res.json())
           .then(result => {
             if(result.code == 400) {
