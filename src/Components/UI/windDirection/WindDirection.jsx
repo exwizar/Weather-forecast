@@ -1,6 +1,6 @@
 import React from 'react'
 import classes from './windDireciton.module.scss'
-import strelka from './strelka.png'
+import strelka from './strelka.svg'
 
 const WindDirection = (props) => {
     let item = props.deg;

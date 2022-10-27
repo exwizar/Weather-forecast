@@ -1,0 +1,49 @@
+.menu {
+    background-image: url('./images/other.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 450px;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0 6px 10px 0 rgba(0, 0, 0 , .3);
+    margin-top: 30px;
+    width: 450px;
+    border-radius: 10px;
+    .menu-block {
+
+        .title-block{ 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        p {
+            padding: 5px 0;
+        }
+    
+        .title {
+            font-size: 15px;
+            font-weight: 600;
+            color: rgb(0, 0, 0);
+        }
+    
+        .weather-info {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            .weather-info__num{
+                font-size: 40px;
+            }
+        }
+        
+        
+        .wind-block {
+            display: flex;
+            gap: 10px;
+        }
+    }
+}

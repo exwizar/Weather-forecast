@@ -5,6 +5,8 @@ import {apiKey} from './Components/API/apiKey'
 import './Style/reset.scss'
 import Modal from "./Components/ModalBlock/Modal";
 import videoBg from './Style/images/clouds.mp4'
+import YourCity from "./Components/YourCity";
+import settings from './Style/images/settings.svg'
 
 function App() {
     let getItems = () => {
@@ -75,7 +77,6 @@ function App() {
         getItemLS()
     },[]);
     
-    console.log(data)
     return (
         <div className="app">
         <video className="video-bg" src={videoBg} autoPlay loop muted></video>
@@ -96,6 +97,11 @@ function App() {
                         className="btn btn--primary btn--inside uppercase"
                     >add</button>
                 </form>
+                    <YourCity>
+                        <a>
+                        <img src={settings} alt="settings"/>
+                        </a>
+                    </YourCity>
                     <WeatherBlock className='weather-block' remove={removePost} data={data} setData={setData}/>
             </div>
         </div>
