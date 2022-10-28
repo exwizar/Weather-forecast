@@ -7,8 +7,12 @@ import Modal from "./Components/ModalBlock/Modal";
 import videoBg from './Style/images/clouds.mp4'
 import YourCity from "./Components/YourCity";
 import settings from './Style/images/settings.svg'
-
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import {m} from './Components/YourCity.jsx'
 function App() {
+
     let getItems = () => {
         let list = localStorage.getItem('lists')
         if(list) {
@@ -17,11 +21,13 @@ function App() {
             return []
         }
     };
-
+    
     const[city, setCity] = useState('');
     const[data, setData] = useState([]);
     const[cityArr, setCityArr] = useState(getItems());
     const [modalAcitve, setModalActive] = useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
 
     // remove item
     const removePost = (dataItem) => {
@@ -36,10 +42,23 @@ function App() {
           getCity()
         }
     };
+
+    const handleOpenMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
     
     function getItemLS() {
         let count = 1
         return cityArr.map(city => {
+            if(city == m.join()) {
+                setCity('')
+                handleCloseMenu()
+                return setModalActive(true)
+            }
             fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
             .then(res => res.json())
             .then(result => {
@@ -51,6 +70,11 @@ function App() {
     };
 
     async function getCity() {
+        if(city == m.join()) {
+            setCity('')
+            handleCloseMenu()
+            return setModalActive(true)
+        }
         await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${apiKey.api}`)
         .then(res => res.json())
         .then(result => {
@@ -76,33 +100,63 @@ function App() {
     useEffect(() => {
         getItemLS()
     },[]);
-    
+
+    const removeInput = () => {
+        setData(data.filter((item) => item.name !== city))
+        setCityArr(cityArr.filter((item) => item !== city))
+        setCity('')
+    }
+ 
     return (
         <div className="app">
         <video className="video-bg" src={videoBg} autoPlay loop muted></video>
             <Modal active={modalAcitve} setActive={setModalActive}/>
             <div className="container">
-                <form className="form">
-                    <input 
-                        type="text" 
-                        placeholder="Город" 
-                        value={city}  
-                        onChange={e => setCity(e.target.value)}
-                        onKeyPress={listener}
-                        className="form__field"
-                    />
-                    <button 
-                        type="button" 
-                        onClick={getCity}
-                        className="btn btn--primary btn--inside uppercase"
-                    >add</button>
-                </form>
-                    <YourCity>
-                        <a>
+                <YourCity>
+
+                    <a
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleOpenMenu}
+                    >
                         <img src={settings} alt="settings"/>
-                        </a>
-                    </YourCity>
-                    <WeatherBlock className='weather-block' remove={removePost} data={data} setData={setData}/>
+                    </a>
+
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleCloseMenu}
+                        MenuListProps={{'aria-labelledby': 'basic-button',}}>
+                        <MenuItem>
+                            <input 
+                                type="text" 
+                                placeholder="Город" 
+                                value={city}  
+                                onChange={e => setCity(e.target.value)}
+                                onKeyPress={listener}
+                                className=""
+                            />
+                        </MenuItem>
+                        <MenuItem onClick={handleCloseMenu}><button 
+                            type="button" 
+                            onClick={getCity}
+                            className="btn-add">
+                            add
+                            </button>
+                        </MenuItem>
+                            <MenuItem onClick={handleCloseMenu}>
+                                <button 
+                                onClick={removeInput}
+                                className="btn-add">
+                                Del
+                                </button>
+                            </MenuItem>
+                    </Menu>
+                </YourCity>
+                <WeatherBlock className='weather-block' remove={removePost} data={data} setData={setData}/>
             </div>
         </div>
     );

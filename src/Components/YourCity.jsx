@@ -5,12 +5,15 @@ import WindDirection from './UI/windDirection/WindDirection';
 import drop from '../Style/images/drop.svg'
 import wind from '../Style/images/wind.svg'
 import '../Style/menuStyle.scss'
-    
+
+const m = [];
+
 const YourCity = ({children}) => {
 
     const [lat, setLat] = useState([]);
     const [long, setLong] = useState([]);
     const [mainCity, setMainCity] = useState([]);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -23,16 +26,18 @@ const YourCity = ({children}) => {
           await fetch(`http://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&lang=ru&units=metric&APPID=${apiKey.api}`)
           .then(res => res.json())
           .then(result => {
-            if(result.code == 400) {
-                return
-            } else {
-                setMainCity(result)
+            if(result.cod != 400) {
+              m.push(result.name)
+              setMainCity(result)
             }
             console.log(result);
-          });
+          })
         }
-        fetchData();
+        m.map((item, index) => item == 'undefined' ? m.slice(index, 1) : item)
+        setTimeout(() => {fetchData()}, 1000);
       }, [lat,long])
+      
+
 
       return (
         <div className='menu'>
@@ -61,7 +66,7 @@ const YourCity = ({children}) => {
             
             </div> 
         ): (
-            <div>Загрузка...</div>
+            <div className="circle"></div>
         )}
         </div>
       )
@@ -69,3 +74,4 @@ const YourCity = ({children}) => {
 }
 
 export default YourCity
+export {m}
