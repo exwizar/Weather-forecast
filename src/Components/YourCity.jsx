@@ -20,8 +20,6 @@ const YourCity = ({children}) => {
           navigator.geolocation.getCurrentPosition(function(position) {
             setLat(position.coords.latitude);
             setLong(position.coords.longitude);
-            console.log(long)
-            console.log(lat);
           });
           await fetch(`http://api.openweathermap.org/data/2.5/weather/?lat=${lat}&lon=${long}&lang=ru&units=metric&APPID=${apiKey.api}`)
           .then(res => res.json())
@@ -30,7 +28,6 @@ const YourCity = ({children}) => {
               m.push(result.name)
               setMainCity(result)
             }
-            console.log(result);
           })
         }
         m.map((item, index) => item == 'undefined' ? m.slice(index, 1) : item)

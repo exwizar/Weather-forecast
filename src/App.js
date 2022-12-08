@@ -82,12 +82,12 @@ function App() {
                 setCity('')
                 return setModalActive(true)
             }
-            console.log(result);
             if (cityArr.indexOf(result.name) == -1) {
                 result.order = cityArr.length + 1
                 setCityArr([...cityArr, result.name])
                 setData([...data, result])
             } else setModalActive(true)
+            console.log(result)
             setCity("")
         });  
     };
@@ -144,14 +144,14 @@ function App() {
                             type="button" 
                             onClick={getCity}
                             className="btn-add">
-                            add
+                            Добавить
                             </button>
                         </MenuItem>
                             <MenuItem onClick={handleCloseMenu}>
                                 <button 
                                 onClick={removeInput}
                                 className="btn-add">
-                                Del
+                                Удалить
                                 </button>
                             </MenuItem>
                     </Menu>
